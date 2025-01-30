@@ -17,8 +17,8 @@ struct LandingView: View {
     var body: some View {
         NavigationView {
             VStack {
-                List (todos) { todo in
-                    ItemView(currentItem: todo)
+                List ($todos) { $todo in
+                    ItemView(currentItem: $todo)
                         .swipeActions {
                             Button (
                                 "Delete",
