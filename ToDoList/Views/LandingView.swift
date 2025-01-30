@@ -6,12 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct LandingView: View {
     
     @State var newItemDescription: String = ""
     @State var searchText = ""
     @State var todos: [TodoItem] = exampleItem
+    @Environment(\.modelContext) var modelContext
     
     // MARK: Computed properties
     var body: some View {
