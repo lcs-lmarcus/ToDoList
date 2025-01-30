@@ -18,10 +18,16 @@ struct LandingView: View {
         NavigationView {
             VStack {
                 List (todos) { todo in
-                    ItemView (currentItem: firstItem)
-                    ItemView (currentItem: secondItem)
-                    ItemView (currentItem: thirdItem)
                     ItemView(currentItem: todo)
+                        .swipeActions {
+                            Button (
+                                "Delete",
+                                role: .destructive,
+                                action: {
+                                    delete(todo)
+                                }
+                            )
+                        }
                 }
                 .searchable(text: $searchText)
                 
@@ -47,6 +53,12 @@ struct LandingView: View {
         )
         
         todos.append(todo)
+    }
+    
+    func delete(_ todo: TodoItem) {
+        todos.removeAll { currentItem in
+            currentItem.id == todo.id
+        }
     }
 }
 
