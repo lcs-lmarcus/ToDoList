@@ -11,14 +11,16 @@ struct LandingView: View {
     
     @State var newItemDescription: String = ""
     @State var searchText = ""
+    @State var todos: [TodoItem] = exampleItem
     
     var body: some View {
         NavigationView {
             VStack {
-                List {
-                    ItemView(currentItem: firstItem)
-                    ItemView(currentItem: secondItem)
-                    ItemView(currentItem: thirdItem)
+                List (todos) { todo in
+                    ItemView (currentItem: firstItem)
+                    ItemView (currentItem: secondItem)
+                    ItemView (currentItem: thirdItem)
+                    ItemView(currentItem: todo)
                 }
                 .searchable(text: $searchText)
                 
