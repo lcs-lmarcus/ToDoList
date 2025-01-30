@@ -13,6 +13,7 @@ struct LandingView: View {
     @State var searchText = ""
     @State var todos: [TodoItem] = exampleItem
     
+    // MARK: Computed properties
     var body: some View {
         NavigationView {
             VStack {
@@ -27,20 +28,32 @@ struct LandingView: View {
                 HStack {
                     TextField("Enter a to-do list item", text: $newItemDescription)
                     Button("Add") {
-                        
+                        createToDo(withTitle: newItemDescription)
                     }
                     .font(.caption)
+                    .disabled(newItemDescription.isEmpty == true)
                 }
                 .padding(20)
             }
             .navigationTitle("To Do")
         }
     }
+    
+    // MARK: Function
+    func createToDo(withTitle title: String) {
+        let todo = TodoItem (
+            title: title,
+            done: false
+        )
+        
+        todos.append(todo)
+    }
 }
 
 #Preview {
     LandingView()
 }
+
 
 
 
