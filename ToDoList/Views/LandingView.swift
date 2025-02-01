@@ -9,29 +9,33 @@ import SwiftUI
 import SwiftData
 
 struct LandingView: View {
-    
-    @State var newItemDescription: String = ""
+    // MARK: Stored Properties
+    // item currently being added
+    @State var newItemDescription =  ""
+    // the search text
     @State var searchText = ""
-    @State var todos: [TodoItem] = exampleItem
+    // Access model context
     @Environment(\.modelContext) var modelContext
+    // List of To do Item
+    @Query var todos: [TodoItem]
+    
+    
     
     // MARK: Computed properties
     var body: some View {
         NavigationView {
             VStack {
-                List ($todos) { $todo in
-                    ItemView(currentItem: $todo)
-                        .swipeActions {
-                            Button (
-                                "Delete",
-                                role: .destructive,
-                                action: {
-                                    delete(todo)
-                                }
-                            )
-                        }
+                List {
+                    ForEach(todos) { todo in
+                        
+                        ItemView(currentItem: todo)
+                 
+                    }
+                    .onDelete(perform: removeRows)
                 }
                 .searchable(text: $searchText)
+
+
                 
                 HStack {
                     TextField("Enter a to-do list item", text: $newItemDescription)
@@ -44,6 +48,9 @@ struct LandingView: View {
                 .padding(20)
             }
             .navigationTitle("To Do")
+            .onAppear{
+                printCommandToOpenDatabaseFile()
+            }
         }
     }
     
@@ -54,19 +61,28 @@ struct LandingView: View {
             done: false
         )
         
-        todos.append(todo)
+        // Use the model context to insert the new to-do
+        modelContext.insert(todo)
+
     }
     
-    func delete(_ todo: TodoItem) {
-        todos.removeAll { currentItem in
-            currentItem.id == todo.id
+    func removeRows(at offsets: IndexSet) {
+        
+        // Accept the offset within the list
+        // (the position of the item being deleted)
+        //
+        // Then ask the model context to delete this
+        // for us, from the 'todos' array
+        for offset in offsets {
+            modelContext.delete(todos[offset])
         }
     }
 }
 
-//#Preview {
-//    LandingView()
-//}
+#Preview {
+    LandingView()
+        .modelContainer(TodoItem.preview)
+}
 
 
 

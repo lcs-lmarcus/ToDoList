@@ -8,22 +8,44 @@
 import SwiftData
 
 @Model
-struct TodoItem: Identifiable {
-    var title:  String
-    var done: Bool
+class TodoItem: Identifiable {
+    var title: String
+    var done : Bool
     
-    init(title: String, done: Bool) {
+    init(title: String, done: Bool){
         self.title = title
         self.done = done
     }
 }
 
-let firstItem = TodoItem(title: "Study for Chemistry quiz", done: false)
-let secondItem = TodoItem(title: "Finish Computer Science assignment", done: true)
-let thirdItem = TodoItem(title: "Go for a run around campus", done: false)
+extension TodoItem {
+    
+    @MainActor
+    static var preview: ModelContainer {
+        
+        let container = try! ModelContainer(
+            for: TodoItem.self,
+            configurations: ModelConfiguration(isStoredInMemoryOnly: true)
+        )
+        
+        // Add mock data
+        container.mainContext.insert(
+            TodoItem(title: "Go for a walk", done: false)
+        )
+        container.mainContext.insert(
+            TodoItem(title: "Have a nap", done: true)
+        )
+        container.mainContext.insert(
+            TodoItem(title: "Call mom", done: false)
+        )
+ 
+        return container
+    }
+}
 
-let exampleItem = [
-    firstItem,
-    secondItem,
-    thirdItem
-]
+extension TodoItem {
+    
+    static let someItem = TodoItem(title: "Read a book", done: true)
+    static let anotherItem = TodoItem(title: "Make a sandwich", done: false)
+ 
+}

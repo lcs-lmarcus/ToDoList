@@ -4,12 +4,12 @@
 //
 //  Created by Marcus Li on 2025-01-28.
 //
-
 import SwiftUI
+import SwiftData
 
 struct ItemView: View {
     
-    @Binding var currentItem: TodoItem
+    @Bindable var currentItem: TodoItem
     
     var body: some View {
         Label(
@@ -26,9 +26,14 @@ struct ItemView: View {
     }
 }
 
-//#Preview {
-//    List {
-//        ItemView(currentItem: Binding.constant(firstItem))
-//        ItemView(currentItem: Binding.constant(secondItem))
-//    }
-//}
+#Preview {
+    
+    let container = TodoItem.preview
+    
+    return List {
+        ItemView(currentItem: TodoItem.someItem)
+        ItemView(currentItem: TodoItem.anotherItem)
+    }
+    .modelContainer(container)
+    
+}
